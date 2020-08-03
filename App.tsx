@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {Dispatch} from 'react';
+import {Dispatch, useState} from 'react';
 import {
   SafeAreaView,
   Button,
@@ -38,6 +38,7 @@ import store from './src/redux/store/store';
 import {IUser} from './src/interface/user';
 
 const App = () => {
+  const [age, setAge] = useState(21);
   const {count} = useSelector((state: AppState) => state.count);
   const {name} = useSelector((state: AppState) => state.name);
   const {data} = useSelector((state: AppState) => state.user);
@@ -52,24 +53,27 @@ const App = () => {
         paddingVertical: 10,
         marginVertical: 10,
         marginHorizontal: 5,
+        justifyContent: 'space-between',
         paddingHorizontal: 5,
+        flexDirection: 'row',
         backgroundColor: '#BBCCBB',
       }}>
       <Text>{item.name}</Text>
+      <Text>{item.age.toString()}</Text>
+      <Button
+        title="Delete"
+        onPress={() => {
+          console.log(item.name);
+        }}
+      />
     </View>
   );
 
-  const handleIncrement = () => {
-    countDispatch({type: 'INCREMENT'});
-  };
-  const handleDecrement = () => {
-    countDispatch({type: 'DECREMENT'});
-  };
   const handleChangeText = (_text: string) => {
     nameDispatch({type: 'SET_NAME', payload: _text});
   };
   const handleAddUser = () => {
-    const u: IUser = {name: name, age: 20};
+    const u: IUser = {name: name, age: age};
     userDispatch({type: 'USER_ADD', payload: u});
   };
 
@@ -77,23 +81,31 @@ const App = () => {
     <Provider store={store}>
       <StatusBar barStyle="dark-content" />
       <View style={{paddingTop: 60}}>
-        <Text>yyyyyy</Text>
-        <Button title="Add" onPress={handleIncrement}></Button>
-        <Text>{count}</Text>
-        <Button title="-" onPress={handleDecrement}></Button>
+        <View style={{marginBottom: 10, flexDirection: 'row'}}>
+          <Text style={{paddingEnd: 10}}>User</Text>
+          <TextInput
+            style={{borderBottomWidth: 2, width: 100}}
+            onChangeText={(text) => {
+              handleChangeText(text);
+            }}
+          />
+        </View>
+        <View style={{marginBottom: 10, flexDirection: 'row'}}>
+          <Text style={{paddingEnd: 10}}>Age</Text>
+          <TextInput
+            value={age.toString()}
+            style={{borderBottomWidth: 2, width: 100}}
+            onChangeText={(text) => {
+              setAge(parseInt(text));
+            }}
+          />
+        </View>
         <Button title="Add  User" onPress={handleAddUser}></Button>
         <Text>{name}</Text>
         <Text>{data[data.length - 1].name}</Text>
         <FlatList
           data={data}
           renderItem={({item}) => renderItem(item)}></FlatList>
-        <Text>Add User</Text>
-        <TextInput
-          style={{borderBottomWidth: 2, width: 100}}
-          onChangeText={(text) => {
-            handleChangeText(text);
-          }}
-        />
       </View>
     </Provider>
   );

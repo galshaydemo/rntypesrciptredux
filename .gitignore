@@ -58,7 +58,7 @@ buck-out/
 #android index
 android/app/src/main/assets/index.android.bundle
 #source-maps
-io
+ios
 android/app/src/main/assets/android-release.bundle.map
 #ios source-maps & bundle
 ios_bundle/ios-release.bundle

@@ -39,6 +39,7 @@ import {IUser} from './src/interface/user';
 
 const App = () => {
   const [age, setAge] = useState(21);
+  const [tz, setTz] = useState('012345678');
   const {count} = useSelector((state: AppState) => state.count);
   const {name} = useSelector((state: AppState) => state.name);
   const {data} = useSelector((state: AppState) => state.user);
@@ -59,10 +60,13 @@ const App = () => {
         backgroundColor: '#BBCCBB',
       }}>
       <Text>{item.name}</Text>
+      <Text>{item.id}</Text>
       <Text>{item.age.toString()}</Text>
       <Button
         title="Delete"
         onPress={() => {
+          const u: IUser = {name: name, age: age, id: tz};
+          userDispatch({type: 'USER_DELETE', payload: u});
           console.log(item.name);
         }}
       />
@@ -73,7 +77,7 @@ const App = () => {
     nameDispatch({type: 'SET_NAME', payload: _text});
   };
   const handleAddUser = () => {
-    const u: IUser = {name: name, age: age};
+    const u: IUser = {name: name, age: age, id: tz};
     userDispatch({type: 'USER_ADD', payload: u});
   };
 
@@ -99,10 +103,16 @@ const App = () => {
               setAge(parseInt(text));
             }}
           />
+          <Text style={{paddingEnd: 10}}>T.Z.</Text>
+          <TextInput
+            value={tz}
+            style={{borderBottomWidth: 2, width: 100}}
+            onChangeText={(text) => {
+              setTz(text);
+            }}
+          />
         </View>
         <Button title="Add  User" onPress={handleAddUser}></Button>
-        <Text>{name}</Text>
-        <Text>{data[data.length - 1].name}</Text>
         <FlatList
           data={data}
           renderItem={({item}) => renderItem(item)}></FlatList>
